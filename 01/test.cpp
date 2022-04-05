@@ -73,6 +73,33 @@ TEST_F(TestFoo, test)
     ASSERT_EQ(p1 - p2, 5);
 }
 
+TEST_F(TestFoo, test1)
+{
+    Allocator alc;
+    alc.makeAllocator(1);
+    char *p1 = alc.alloc(1);
+    ASSERT_NE(p1, nullptr);
+    
+    char *p2 = alc.alloc(11);
+    ASSERT_EQ(p2, nullptr);
+    
+    
+    alc.makeAllocator(50);
+    p1 = alc.alloc(20);
+    p2 = alc.alloc(30);
+    
+    ASSERT_NE(p1, nullptr);
+    ASSERT_NE(p2, nullptr);
+    
+    p1 = alc.alloc(1);
+    ASSERT_EQ(p1, nullptr);
+     
+    alc.reset();
+    
+    p1 = alc.alloc(50);
+    ASSERT_NE(p1, nullptr);
+}
+
 int main(int argc, char *argv[])
 {
 	::testing::InitGoogleTest(&argc, argv);

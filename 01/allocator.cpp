@@ -1,10 +1,6 @@
 #include <iostream>
 #include "allocator.hpp"
 
-using std::cin;
-using std::cout;
-using std::endl;
-
 Allocator::~Allocator()
 {
     delete [] data;
