@@ -52,6 +52,6 @@ void TokenParser::Parse(const string &str)
     }
     
     if (EndFunc)
-        EndFunc("Start parsing");
+        EndFunc("End parsing");
     return; 
 }

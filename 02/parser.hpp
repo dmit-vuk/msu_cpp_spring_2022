@@ -28,9 +28,6 @@ public:
     // Устанавливаем callback-функцию для обработки строк.
     void SetStringTokenCallback(void (*func)(const string &));
 
-    // Тут другие методы для установки callback-функций.
-    //...
-    void update(const string &);
     void Parse(const string &);
 };
 
