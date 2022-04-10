@@ -13,7 +13,7 @@ void TokenParser::SetEndCallback( void (*func)(const string &))
     EndFunc = func;
 }
 
-void TokenParser::SetDigitTokenCallback( void (*func)(const string &))
+void TokenParser::SetDigitTokenCallback( void (*func)(uint64_t))
 {
     DigitFunc = func;
 }
@@ -26,32 +26,53 @@ void TokenParser::SetStringTokenCallback( void (*func)(const string &))
 void TokenParser::Parse(const string &str)
 {
     string token;
-    void (*CurrFunk)(const std::string &) = DigitFunc;
-    
+    bool digit = true;
+    num_strs = num_digs = 0;
     if (StartFunc)
         StartFunc("Start parsing");
     for (size_t i=0; i < str.length(); ++i) {
         if (isspace(str[i])) {
             if (!token.empty()) {
-                if (CurrFunk)
-                    CurrFunk(token);
-                CurrFunk = DigitFunc;
+                if (digit){
+                    ++num_digs;
+                    if(DigitFunc)
+                        DigitFunc(std::stoull(token));
+                } else {
+                    ++num_strs;
+                    if(StringFunc)
+                        StringFunc(token);
+                }
+                digit = true;
                 token.clear();
             }
             continue;
         }
         token += str[i];
         if (!std::isdigit(str[i]))
-            CurrFunk = StringFunc;
+            digit = false;
     }
     
     if (!token.empty()) {
-        if (CurrFunk)
-            CurrFunk(token);
+        if (digit) {
+            ++num_digs;
+            if(DigitFunc)
+                DigitFunc(std::stoull(token));
+        } else{
+            ++num_strs;
+            if(StringFunc)
+                StringFunc(token);
+        }
         token.clear();
     }
-    
     if (EndFunc)
         EndFunc("End parsing");
-    return; 
+    return;
+}
+
+size_t TokenParser::get_digs(){
+    return num_digs;
+}
+
+size_t TokenParser::get_strs(){
+    return num_strs;
 }
