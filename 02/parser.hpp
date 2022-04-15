@@ -2,16 +2,17 @@
 #define PARSER
 
 #include <string>
+#include <functional>
 
 using std::string;
 
 class TokenParser
 {
 private:
-	void (*StartFunc)(const string &) = nullptr;
-	void (*EndFunc)(const string &) = nullptr;
-	void (*DigitFunc)(const uint64_t) = nullptr;
-	void (*StringFunc)(const string &) = nullptr;
+    std::function<void (uint64_t)> DigitFunc = nullptr;
+    std::function<void (const string &)> StartFunc = nullptr;
+    std::function<void (const string &)> EndFunc = nullptr;
+    std::function<void (const string &)> StringFunc = nullptr;
 	size_t num_digs=0, num_strs=0; 
 
 public:
